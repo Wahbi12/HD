@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tech Help</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+            text-align: center;
+        }
+        #app {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        input[type="text"], button {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #response {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <h1>Ask a Tech Question</h1>
+        <input type="text" id="question" placeholder="Type your tech question here...">
+        <button onclick="getAnswer()">Get Answer</button>
+        <div id="response"></div>
+    </div>
+
+    <script>
+        async function getAnswer() {
+            const question = document.getElementById('question').value;
+            const responseDiv = document.getElementById('response');
+            responseDiv.innerHTML = "Loading...";
+            try {
+                const response = await fetch('http://localhost:5000/api', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ question }),
+                });
+                const data = await response.json();
+                responseDiv.innerHTML = `<p>${data.answer}</p>`;
+            } catch (error) {
+                responseDiv.innerHTML = "An error occurred. Please try again.";
+                console.error(error);
+            }
+        }
+    </script>
+</body>
+</html>
